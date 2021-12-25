@@ -1,0 +1,60 @@
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import discord
+import nest_asyncio
+nest_asyncio.apply()
+
+path = "C:\Program Files (x86)\chromedriver.exe"
+driver = webdriver.Chrome(path)
+driver.get("https://amazon.com")
+
+#Discord
+TOKEN = "OTIzNjQ3NzU5NzkyMzY5Nzc0.YcTEAg.iLTLXcep5Ic69a3HC04wAYFUMPI"
+
+client = discord.Client()
+
+@client.event
+async def on_ready():
+    print("We have logged in as {0.user}".format(client))
+    
+@client.event
+async def on_message(message):
+    user_message = str(message.content)
+    
+    if "$search" in user_message:
+        search = user_message[8:]
+        amazonsearch = driver.find_element_by_id("twotabsearchtextbox")
+        amazonsearch.clear()
+        amazonsearch.send_keys(search)
+        amazonsearch.send_keys(Keys.RETURN)
+        results1 = driver.find_elements_by_xpath("//*[starts-with(@class,'a-size-base-plus a-color-base a-text-normal')]")
+        results1 = results1[0:3]
+        
+        results = driver.find_elements_by_xpath("//*[starts-with(@class,'a-size-medium a-color-base a-text-normal')]")
+        results = results[0:3]
+        
+        prices = driver.find_elements_by_xpath("//*[starts-with(@class,'a-price-whole')]")
+        prices = prices[0:3]
+        
+        for i in range(len(prices)):
+            # result1 = results1[i]
+            result = results[i]
+            price = prices[i]
+            # await message.channel.send(result1.text)
+            await message.channel.send(result.text)
+            await message.channel.send("$" + price.text)
+            await message.channel.send("-------------------------------------")
+            
+        
+        return
+    
+    if message.author == client.user:
+        return
+    
+    
+
+client.run(TOKEN)
+
+
+
+    
