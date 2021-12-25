@@ -9,7 +9,7 @@ driver = webdriver.Chrome(path)
 driver.get("https://amazon.com")
 
 #Discord
-TOKEN = "OTIzNjQ3NzU5NzkyMzY5Nzc0.YcTEAg.iLTLXcep5Ic69a3HC04wAYFUMPI"
+TOKEN = ""
 
 client = discord.Client()
 
